@@ -1,12 +1,13 @@
 <script lang="ts">
-  import '../styles/reset.css';
+  import '../styles/reset.css'; 
   import '../styles/app.css';
+  import '../styles/globals.css';
 
 </script>
 
-<header class="sticky t-0 w-10">
+<header class="sticky t-0 w-full py-5 justify-center flex">
   <nav>
-    <ul class="navigation">
+    <ul class="flex w-fit gap-x-3 px-2 py-3 bg-blur-md border-solid rounded-md">
       <li>
         <a href="/" class="link">
           Home
@@ -21,26 +22,10 @@
   </nav>
 
 </header>
-
+<main class="px-3">
 <slot></slot>
+</main>
 
 <style lang="scss">
 
-  .header { 
-    display: flex;
-    width: 100%;
-    justify-content: center;
-    padding-block: 20px;
-    position: sticky;
-    top: 0px;
-  }
-  .navigation { 
-    display: flex;
-    column-gap: 12px;
-    padding: 8px 12px;  
-    backdrop-filter: blur(8px);
-    border: 1px solid black;
-    border-radius: 8px;
-
-  }
 </style>
