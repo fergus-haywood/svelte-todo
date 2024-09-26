@@ -1,3 +1,6 @@
-.border-solid {
+.border-default {
 	@apply border border-black;
+}
+.border-charcoal {
+	@apply border border-lightCharcoal border-solid;
 }
