@@ -1,4 +1,11 @@
 <script lang="ts">
+import Todo from './Todo.svelte';
+export let data;
+
+console.log('this is the data', data)
+
+
+
 
 const status_list = [
   "Not Started", 
@@ -6,40 +13,35 @@ const status_list = [
   "In Review",
   "Completed"
 ]
+
 let tests = [
       {   
-        id: 000,
+        id: 1,
         title: "Test Todo",
         description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard",
         assignee: "Fergus Haywood",
         status: 'Not Started'
       },
       { 
-        id: 001,
+        id: 2,
         title: "Build the Website",
         description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard",
         assignee: null,
         status: 'Not Started'
       },
       {
-        id: 002,
+        id: 3,
         title: "Organise Lunch Venue", 
         description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard",
         assignee: "Sophie Kerr",
         status: 'In Process'
-    },
-    // {
-    //   id: 003,
-    //   title: null, 
-    //   description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard",
-    //   assignee: "Sophie Kerr",
-    //   status: 'In Process'
-    // }
+    }
 ]
 
 
-const statusBg = (status) => { 
 
+
+const statusBg = (status) => { 
   switch (status) {
     case 'Not Started':
       return 'bg-lightCharcoal';
@@ -71,7 +73,6 @@ function drop(event, status) {
 
 
   function createTodo(status) { 
-    console.log('new todo with this status', status)
     const newTodo = { 
       id: tests.length + 1,
       title: null,
@@ -82,6 +83,12 @@ function drop(event, status) {
 
     tests.push(newTodo);
     tests = tests;
+  }
+
+  function handleTodoChange(todo, event, key) { 
+
+    todo[key] = event.target.value
+    tests = tests
   }
 
 
@@ -104,24 +111,8 @@ function drop(event, status) {
         class="flex flex-col gap-y-1 mt-4 h-full"
         on:drop={event => drop(event, status)}
         ondragover="return false">
-          {#each tests.filter(x => x.status == status) as todo}
-              <li 
-              class="rounded-md shadow-md hover:shadow-sm hover:bg-slate transition-all duration-200 p-2 border-charcoal cursor-pointer"
-              draggable={true}
-              on:dragstart={event => dragStart(event, status, todo)}
-               >
-                <button>
-                  {#if todo.title}
-                  <p>
-                    {todo.title}
-                  </p>
-                  {:else}
-                  <p class="text-charcoal">
-                    New Todo
-                  </p>
-                  {/if}
-                </button>
-              </li>
+          {#each tests.filter(x => x.status == status) as todo (todo.id)}
+              <Todo {todo} {dragStart} {handleTodoChange}/>
           {/each}
           <button
           on:click={() => createTodo(status)}
