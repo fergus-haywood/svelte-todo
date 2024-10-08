@@ -1,10 +1,8 @@
+
 <script lang="ts">
+import { supabase } from "$lib/supabase";
 import Todo from './Todo.svelte';
-export let data;
-
-console.log('this is the data', data)
-
-
+export let todos;
 
 
 const status_list = [
@@ -14,30 +12,7 @@ const status_list = [
   "Completed"
 ]
 
-let tests = [
-      {   
-        id: 1,
-        title: "Test Todo",
-        description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard",
-        assignee: "Fergus Haywood",
-        status: 'Not Started'
-      },
-      { 
-        id: 2,
-        title: "Build the Website",
-        description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard",
-        assignee: null,
-        status: 'Not Started'
-      },
-      {
-        id: 3,
-        title: "Organise Lunch Venue", 
-        description: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard",
-        assignee: "Sophie Kerr",
-        status: 'In Process'
-    }
-]
-
+let tests = todos
 
 
 
@@ -66,10 +41,25 @@ function drop(event, status) {
     const json = event.dataTransfer.getData("text/plain");
 		const data = JSON.parse(json);
     const { todo } = data
-      
+
+    //update local state
     tests.find((x) => x.id == todo.id).status = status
 		tests = tests;
+
+  
+    //update db
+    updateTodoDb(todo.id, status)
 	}
+
+
+  const updateTodoDb = async(id, status) => { 
+    const res = await supabase.from('todos').update({ status }).eq('id', id)
+  }
+
+  const createTodoDb = async (status) => { 
+    const res = await supabase.from('todos').insert({ title: null, description: null, status: status })
+    console.log('this is the new todo res', res)
+  }
 
 
   function createTodo(status) { 
@@ -80,9 +70,16 @@ function drop(event, status) {
       assignee: null,
       status
     }
-
+    //create locally
     tests.push(newTodo);
     tests = tests;
+
+    //create in db
+    createTodoDb(status)
+
+    
+
+
   }
 
   function handleTodoChange(todo, event, key) { 
