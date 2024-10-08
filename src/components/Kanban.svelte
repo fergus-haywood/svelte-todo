@@ -88,6 +88,13 @@ function drop(event, status) {
     tests = tests
   }
 
+  function handleTodoDelete(todo) { 
+
+    //update locally
+    tests = tests.filter((x) => x.id != todo.id)
+
+  }
+
 
 </script>
 
@@ -109,7 +116,7 @@ function drop(event, status) {
         on:drop={event => drop(event, status)}
         ondragover="return false">
           {#each tests.filter(x => x.status == status) as todo (todo.id)}
-              <Todo {todo} {dragStart} {handleTodoChange}/>
+              <Todo {todo} {dragStart} {handleTodoChange} {handleTodoDelete}/>
           {/each}
           <button
           on:click={() => createTodo(status)}

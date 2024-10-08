@@ -4,12 +4,14 @@ import { supabase } from "$lib/supabase";
 
   export let dragStart;
   export let handleTodoChange;
+  export let handleTodoDelete;
   export let todo;
 
 
   let updated = false;
   let extended = false;
-  let saved = false;
+  let saved = false
+  ;
   const handleSave = async() => {
     const res = await supabase.from('todos')
     .update({ title: todo.title, description: todo.description })
@@ -29,6 +31,18 @@ import { supabase } from "$lib/supabase";
     updated = true;
     handleTodoChange(todo, event, key)
   }
+
+
+  const handleDelete = async(todo) => { 
+    //update local state
+    handleTodoDelete(todo)
+
+    //update db
+    const res = await supabase.from('todos').delete().eq('id', todo.id)
+    console.log('this is the res', res)
+
+  }
+
 
 </script>
 
@@ -74,6 +88,13 @@ import { supabase } from "$lib/supabase";
       <p class="text-xs text-red-500">
         Not saved
       </p>
+      {:else}
+      <button 
+      on:click={event => handleDelete(todo)} 
+      class="text-red-500 rounded-md border-red-400 border-1 border-solid px-2 py-1 text-xs duration-200 transition-all hover:bg-red-400"
+      >
+      Delete
+    </button>
       {/if}
       </div>
     </div>
