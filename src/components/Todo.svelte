@@ -52,7 +52,7 @@ import { supabase } from "$lib/supabase";
   on:dragstart={event => dragStart(event, status, todo)}
    >
    <div 
-   class={`flex flex-col h-full ${extended ? 'h-60' : 'h-[24px]'} transition-all duration-200 relative`}
+   class={`flex flex-col h-full ${extended ? 'h-[200px]' : 'h-[24px]'} transition-all duration-200 relative`}
    on:click={() => extended = true}
    >
     <input 
@@ -60,7 +60,7 @@ import { supabase } from "$lib/supabase";
       placeholder="New Todo"
       class='placeholder:text-charcoal w-full'
       value={todo.title} 
-      on:change={event => handleChange(todo, event, 'title')}
+      on:input={event => handleChange(todo, event, 'title')}
       />
 
       {#if extended}
@@ -72,7 +72,7 @@ import { supabase } from "$lib/supabase";
         class='placeholder:text-charcoal w-full'
         rows=3
         value={todo.description}
-        on:change={event => handleChange(todo, event, 'description')}
+        on:input={event => handleChange(todo, event, 'description')}
         />
         <div class="absolute bottom-1 w-full flex justify-between items-center px-1">
         <button
